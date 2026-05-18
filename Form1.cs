@@ -53,8 +53,14 @@ namespace OtoPazarProjesi
             db.Kullanicilar.Add(new Kullanici { Id = 1, KullaniciAdi = "alici_demo", Sifre = "1234", Rol = "Alici" });
             db.Kullanicilar.Add(new Kullanici { Id = 2, KullaniciAdi = "satici_demo", Sifre = "1234", Rol = "Satici" });
             
-            Image imgMercedes = ResimOlustur("Mercedes Parça");
-            Image imgAudi = ResimOlustur("Audi Parça");
+            Image imgMercedes = null;
+            Image imgAudi = null;
+
+            try { imgMercedes = Image.FromFile(@"C:\Users\HP\Pictures\110001172368230.jpg"); }
+            catch { imgMercedes = ResimOlustur("Mercedes Parça"); }
+
+            try { imgAudi = Image.FromFile(@"C:\Users\HP\Pictures\images.jpg"); }
+            catch { imgAudi = ResimOlustur("Audi Parça"); }
 
             db.Urunler.Add(new Urun { Id = 1, Baslik = "Mercedes Benz Sibop Kapağı", Fiyat = 300, SaticiId = 2, Tarih = DateTime.Now, UrunResmi = imgMercedes, Durum = "Sıfır", Km = 0, SaseNo = "WDB2100351A654321", ModelYili = 2018 });
             db.Urunler.Add(new Urun { Id = 2, Baslik = "Audi sport kaporta", Fiyat = 90000, SaticiId = 2, Tarih = DateTime.Now, UrunResmi = imgAudi, Durum = "İkinci El", Km = 0, SaseNo = "WDB56400351D654321", ModelYili = 2017 });
@@ -121,15 +127,15 @@ namespace OtoPazarProjesi
             this.Controls.Add(pnlGiris);
 
             pnlSatici = new Panel { Dock = DockStyle.Fill, Visible = false, BackColor = Color.White };
-            Panel pnlSaticiUst = new Panel { Dock = DockStyle.Top, Height = 90, BackColor = Color.DarkSlateBlue };
-            pnlSaticiUst.Controls.Add(new Label { Text = "Satıcı Paneli - İlanlarım", Location = new Point(30, 25), Font = new Font("Segoe UI", 22, FontStyle.Bold), AutoSize=true, ForeColor = Color.White });
-            btnCikisSatici = new Button { Text = "Güvenli Çıkış", Anchor = AnchorStyles.Right | AnchorStyles.Top, Location = new Point(pnlSaticiUst.Width - 160, 25), Width=140, Height=45, BackColor=Color.LightCoral, Font = new Font("Segoe UI", 11, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand }; btnCikisSatici.Click += BtnCikis_Click; pnlSaticiUst.Controls.Add(btnCikisSatici);
+            Panel pnlSaticiUst = new Panel { Dock = DockStyle.Top, Height = 100, BackColor = Color.DarkSlateBlue };
+            pnlSaticiUst.Controls.Add(new Label { Text = "Satıcı Paneli - İlanlarım", Location = new Point(30, 30), Font = new Font("Segoe UI", 24, FontStyle.Bold), AutoSize=true, ForeColor = Color.White });
+            btnCikisSatici = new Button { Text = "Güvenli Çıkış", Anchor = AnchorStyles.Right | AnchorStyles.Top, Location = new Point(pnlSaticiUst.Width - 160, 30), Width=140, Height=45, BackColor=Color.LightCoral, Font = new Font("Segoe UI", 11, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand }; btnCikisSatici.Click += BtnCikis_Click; pnlSaticiUst.Controls.Add(btnCikisSatici);
             pnlSatici.Controls.Add(pnlSaticiUst);
 
-            Panel pnlSaticiSag = new Panel { Dock = DockStyle.Right, Width = 450, BackColor = Color.LightSteelBlue, BorderStyle = BorderStyle.FixedSingle };
+            Panel pnlSaticiSag = new Panel { Dock = DockStyle.Right, Width = 550, BackColor = Color.LightSteelBlue, BorderStyle = BorderStyle.FixedSingle };
             pnlSaticiSag.Controls.Add(new Label { Text = "📬 Gelen Mesajlar", Location = new Point(15, 15), Font = new Font("Segoe UI", 18, FontStyle.Bold), AutoSize=true });
             pnlSaticiSag.Controls.Add(new Label { Text = "(Mesajı yanıtlamak için üzerine tıklayın)", Location = new Point(15, 50), Font = new Font("Segoe UI", 11, FontStyle.Italic), AutoSize=true, ForeColor = Color.DimGray });
-            dgvSaticiMesajlar = new DataGridView { Location = new Point(15, 80), Size = new Size(415, 600), SelectionMode = DataGridViewSelectionMode.FullRowSelect, AllowUserToAddRows=false, ReadOnly=true, AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill, AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Font=new Font("Segoe UI", 12) }, ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle { Font=new Font("Segoe UI", 12, FontStyle.Bold) }, RowTemplate = { MinimumHeight = 40 } }; 
+            dgvSaticiMesajlar = new DataGridView { Location = new Point(15, 80), Size = new Size(515, 600), SelectionMode = DataGridViewSelectionMode.FullRowSelect, AllowUserToAddRows=false, ReadOnly=true, AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill, AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Font=new Font("Segoe UI", 12) }, ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle { Font=new Font("Segoe UI", 12, FontStyle.Bold) }, RowTemplate = { MinimumHeight = 40 } }; 
             dgvSaticiMesajlar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvSaticiMesajlar.CellClick += DgvSaticiMesajlar_CellClick;
             pnlSaticiSag.Controls.Add(dgvSaticiMesajlar);
@@ -164,31 +170,31 @@ namespace OtoPazarProjesi
             btnIlanEkle = new Button { Text = "✔ İlanı Hemen Yayınla", Location = new Point(20, 590), Width=330, Height=60, BackColor = Color.SeaGreen, ForeColor = Color.White, Font = new Font("Segoe UI", 16, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand }; btnIlanEkle.Click += BtnIlanEkle_Click; pnlIlanEkle.Controls.Add(btnIlanEkle);
             pnlSatici.Controls.Add(pnlIlanEkle);
 
-            flpSatici = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(30) };
+            flpSatici = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(30, 50, 30, 30) };
             pnlSatici.Controls.Add(flpSatici);
             this.Controls.Add(pnlSatici);
 
             pnlAlici = new Panel { Dock = DockStyle.Fill, Visible = false, BackColor = Color.White };
-            Panel pnlAliciUst = new Panel { Dock = DockStyle.Top, Height = 90, BackColor = Color.SeaGreen };
-            pnlAliciUst.Controls.Add(new Label { Text = "Tüm İlanlar", Location = new Point(30, 25), Font = new Font("Segoe UI", 22, FontStyle.Bold), AutoSize=true, ForeColor = Color.White });
+            Panel pnlAliciUst = new Panel { Dock = DockStyle.Top, Height = 100, BackColor = Color.SeaGreen };
+            pnlAliciUst.Controls.Add(new Label { Text = "Tüm İlanlar", Location = new Point(30, 30), Font = new Font("Segoe UI", 24, FontStyle.Bold), AutoSize=true, ForeColor = Color.White });
             
-            pnlAliciUst.Controls.Add(new Label { Text = "🔍 Arama:", Location = new Point(450, 32), Font = new Font("Segoe UI", 16, FontStyle.Bold), AutoSize=true, ForeColor = Color.White });
-            txtAra = new TextBox { Location = new Point(580, 30), Width=300, Font = new Font("Segoe UI", 16) };
+            pnlAliciUst.Controls.Add(new Label { Text = "🔍 Arama:", Location = new Point(480, 35), Font = new Font("Segoe UI", 16, FontStyle.Bold), AutoSize=true, ForeColor = Color.White });
+            txtAra = new TextBox { Location = new Point(650, 33), Width=300, Font = new Font("Segoe UI", 16) };
             txtAra.TextChanged += TxtAra_TextChanged; pnlAliciUst.Controls.Add(txtAra);
 
-            btnCikisAlici = new Button { Text = "Güvenli Çıkış", Anchor = AnchorStyles.Right | AnchorStyles.Top, Location = new Point(pnlAliciUst.Width - 160, 25), Width=140, Height=45, BackColor=Color.LightCoral, Font = new Font("Segoe UI", 11, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand }; btnCikisAlici.Click += BtnCikis_Click; pnlAliciUst.Controls.Add(btnCikisAlici);
+            btnCikisAlici = new Button { Text = "Güvenli Çıkış", Anchor = AnchorStyles.Right | AnchorStyles.Top, Location = new Point(pnlAliciUst.Width - 160, 30), Width=140, Height=45, BackColor=Color.LightCoral, Font = new Font("Segoe UI", 11, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand }; btnCikisAlici.Click += BtnCikis_Click; pnlAliciUst.Controls.Add(btnCikisAlici);
             pnlAlici.Controls.Add(pnlAliciUst);
 
-            Panel pnlAliciSag = new Panel { Dock = DockStyle.Right, Width = 450, BackColor = Color.LightSteelBlue, BorderStyle = BorderStyle.FixedSingle };
+            Panel pnlAliciSag = new Panel { Dock = DockStyle.Right, Width = 550, BackColor = Color.LightSteelBlue, BorderStyle = BorderStyle.FixedSingle };
             pnlAliciSag.Controls.Add(new Label { Text = "📬 Gelen Mesajlar", Location = new Point(15, 15), Font = new Font("Segoe UI", 18, FontStyle.Bold), AutoSize=true });
             pnlAliciSag.Controls.Add(new Label { Text = "(Mesajı yanıtlamak için üzerine tıklayın)", Location = new Point(15, 50), Font = new Font("Segoe UI", 11, FontStyle.Italic), AutoSize=true, ForeColor = Color.DimGray });
-            dgvAliciMesajlar = new DataGridView { Location = new Point(15, 80), Size = new Size(415, 600), SelectionMode = DataGridViewSelectionMode.FullRowSelect, AllowUserToAddRows=false, ReadOnly=true, AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill, AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Font=new Font("Segoe UI", 12) }, ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle { Font=new Font("Segoe UI", 12, FontStyle.Bold) }, RowTemplate = { MinimumHeight = 40 } }; 
+            dgvAliciMesajlar = new DataGridView { Location = new Point(15, 80), Size = new Size(515, 600), SelectionMode = DataGridViewSelectionMode.FullRowSelect, AllowUserToAddRows=false, ReadOnly=true, AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill, AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Font=new Font("Segoe UI", 12) }, ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle { Font=new Font("Segoe UI", 12, FontStyle.Bold) }, RowTemplate = { MinimumHeight = 40 } }; 
             dgvAliciMesajlar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvAliciMesajlar.CellClick += DgvAliciMesajlar_CellClick;
             pnlAliciSag.Controls.Add(dgvAliciMesajlar);
             pnlAlici.Controls.Add(pnlAliciSag);
 
-            flpAlici = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(30) };
+            flpAlici = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(30, 50, 30, 30) };
             pnlAlici.Controls.Add(flpAlici);
             this.Controls.Add(pnlAlici);
 
@@ -205,9 +211,9 @@ namespace OtoPazarProjesi
             
             lblDetayBilgi = new Label { Location = new Point(650, 260), Font = new Font("Segoe UI", 16), AutoSize=true, Height=150 }; pnlIlanDetay.Controls.Add(lblDetayBilgi);
 
-            pnlIlanDetay.Controls.Add(new Label { Text = "Satıcıya İletişim Mesajı:", Location = new Point(650, 430), Font=new Font("Segoe UI", 16, FontStyle.Bold), AutoSize=true });
-            txtDetayMesaj = new TextBox { Location = new Point(650, 470), Width = 550, Height = 110, Multiline = true, Font = new Font("Segoe UI", 14) }; pnlIlanDetay.Controls.Add(txtDetayMesaj);
-            btnDetayMesajGonder = new Button { Text = "Mesajı İlet", Location = new Point(1220, 470), Width = 150, Height = 110, BackColor = Color.Teal, ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 14, FontStyle.Bold), Cursor = Cursors.Hand }; btnDetayMesajGonder.Click += BtnDetayMesajGonder_Click; pnlIlanDetay.Controls.Add(btnDetayMesajGonder);
+            pnlIlanDetay.Controls.Add(new Label { Text = "Satıcıya İletişim Mesajı:", Location = new Point(60, 620), Font=new Font("Segoe UI", 18, FontStyle.Bold), AutoSize=true });
+            txtDetayMesaj = new TextBox { Location = new Point(60, 660), Width = 750, Height = 110, Multiline = true, Font = new Font("Segoe UI", 14) }; pnlIlanDetay.Controls.Add(txtDetayMesaj);
+            btnDetayMesajGonder = new Button { Text = "Mesajı İlet", Location = new Point(830, 660), Width = 180, Height = 110, BackColor = Color.Teal, ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 16, FontStyle.Bold), Cursor = Cursors.Hand }; btnDetayMesajGonder.Click += BtnDetayMesajGonder_Click; pnlIlanDetay.Controls.Add(btnDetayMesajGonder);
 
             this.Controls.Add(pnlIlanDetay);
         }
@@ -414,8 +420,14 @@ namespace OtoPazarProjesi
             if (dgv.Columns["Id"] != null) dgv.Columns["Id"].Visible = false;
             if (dgv.Columns["GonderenId"] != null) dgv.Columns["GonderenId"].Visible = false;
 
-            if (dgv.Columns["Gönderen"] != null) dgv.Columns["Gönderen"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            if (dgv.Columns["Tarih"] != null) dgv.Columns["Tarih"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            if (dgv.Columns["Gönderen"] != null) {
+                dgv.Columns["Gönderen"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["Gönderen"].Width = 140;
+            }
+            if (dgv.Columns["Tarih"] != null) {
+                dgv.Columns["Tarih"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["Tarih"].Width = 160;
+            }
             if (dgv.Columns["Mesaj"] != null) dgv.Columns["Mesaj"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
